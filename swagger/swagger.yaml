@@ -1,0 +1,634 @@
+swagger: "2.0"
+info:
+  title: Identity Manager
+  description: |
+    This is the base API for Identity Manager microservice. Api documentation
+    available in /api/idm/docs
+  version: "1.0.0"
+  contact:
+    name: Carlos Ruiz
+    email: caruizag@gmail.com
+host: localhost:30030
+basePath: /api/idm
+schemes:
+  - http
+paths:
+  /login/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Login ID to get
+        type: integer
+        required: true
+    get:
+      tags:
+        - login
+      summary: Get Login details by Id to display in login screen.
+      description: |
+        Get Loging details it returns an object which contains basic info to
+        initiate the login this is a non secured way this allows the user to get
+        all the login details available.
+      operationId: getLoginDetailsById
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Login'
+        404:
+          description: Loging not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /login:
+    get:
+      tags:
+        - login
+      summary: Get Default Login details to display login screen.
+      operationId: getLoginDetails
+      produces:
+        - application/json
+      description: |
+        Get Loging details it returns an object which contains basic info to
+        initiate the login this is a non secured way this allows the user to get all
+        the login details available.
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Login'
+        404:
+          description: Loging not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - login
+      summary: Add loging details.
+      operationId: addLoginDetails
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      description: |
+        Add new login handler , you can have multiple logins defined per IDM.
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: login
+          description: Login mode to create
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        201:
+          description: Created
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - login
+      summary: Update loging details
+      operationId: updateLoginDetails
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      description: |
+        Update login details to an existing login.
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: login
+          description: The Login mode to create
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        201:
+          description: Created
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        404:
+          description: Loging not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /resource/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Login ID to get
+        type: string
+        required: true
+    get:
+      tags:
+        - resource
+      summary: Get Resource details by Id
+      description: |
+        Get a particular resource by Id
+      operationId: getResourceById
+      produces:
+        - application/json
+      security:
+        - bearer: []
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Resource'
+        404:
+          description: Resource not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /resource/:
+    put:
+      tags:
+        - resource
+      summary: Update Resource details by Id
+      description: |
+        Get a particular resource by Id
+      operationId: updateResource
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: resource
+          description: resource
+          required: true
+          schema:
+            $ref: '#/definitions/Resource'
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Resource'
+        404:
+          description: Resource not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - resource
+      summary: Add Resource details by Id
+      description: |
+        Get a particular resource by Id
+      operationId: addResource
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: resource
+          required: true
+          schema:
+            $ref: '#/definitions/Resource'
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Resource'
+        404:
+          description: Resource not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - resource
+      summary: Delete Resource details by Id
+      description: |
+        Get a particular resource by Id
+      operationId: deleteResource
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: resource
+          required: true
+          schema:
+            $ref: '#/definitions/Resource'
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Resource'
+        404:
+          description: Resource not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /login/config/{id}:
+    parameters:
+      - name: id
+        in: path
+        description: Config name
+        type: string
+        required: true
+    get:
+      tags:
+        - login
+      summary: Get Default Login details to display login screen.
+      operationId: getLoginConfigDetails
+      produces:
+        - application/json
+      description: |
+        Get Login persisted configurations.
+      security:
+        - bearer: []
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/Configuration'
+        404:
+          description: Loging not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - login
+      summary: Update loging configuration details
+      operationId: updateLoginConfigDetails
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      description: |
+        Update login details to an existing login.
+      security:
+        - bearer: []
+      parameters:
+        - in: body
+          name: Configuration
+          description: The Configuration object
+          required: true
+          schema:
+            $ref: '#/definitions/Configuration'
+      responses:
+        201:
+          description: Created
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        404:
+          description: Loging not found
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /cidmlogin:
+      get:
+        tags:
+          - login
+        summary: Execute action for  Loging handler in TEST only .
+        description: |
+          Get Loging handler for test enviroments only, this is controled via
+          a ENV variable.
+        operationId: getLoginMock
+        produces:
+          - application/json
+        responses:
+          200 :
+            description: Successful operation ok - resource found
+          302 :
+            description: Successful operation ok - redirect to OAuth2
+            headers:
+              Location:
+                type: "string"
+          default:
+            description: Unexpected error
+            schema:
+              $ref: '#/definitions/Error'
+      post:
+        tags:
+          - login
+        summary: Execute action for  Loging handler.
+        description: Get Loging handler
+        operationId: getLogin
+        consumes:
+          - application/json
+        produces:
+          - application/json
+        parameters:
+          - in: body
+            name: body
+            description: Specification of Loging handler needed.
+            required: true
+            schema:
+              $ref: "#/definitions/Login"
+        responses:
+          200 :
+            description: Successful operation ok - resource found
+          302 :
+            description: Successful operation ok - redirect to OAuth2
+            headers:
+              Location:
+                type: "string"
+          default:
+            description: Unexpected error
+            schema:
+              $ref: '#/definitions/Error'
+  /cidmcallback:
+    get:
+      tags:
+        - login
+      summary: Get Login return callback used for OAuth2
+      description: Get Loging screen
+      operationId: getLoginCallback
+      produces:
+        - application/json
+      responses:
+        302 :
+          description: Successful operation ok - redirect to OAuth2
+          headers:
+            Authorization:
+              type: "string"
+            Location:
+              type: "string"
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /token/authentication:
+    get:
+      tags:
+        - token
+      summary: Validate token in header.
+      description: Get Loging screen
+      operationId: tokenValidate
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful operation
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - token
+      summary: Validate token in header no need for authentication
+      description: Validate token
+      operationId: tokenValidatPayload
+      produces:
+        - application/json
+      consumes:
+          - application/json
+      parameters:
+        - in: body
+          name: login
+          description: Login mode to create
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Valid Token
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /token/authorization/:
+    get:
+      tags:
+        - token
+      summary: Get all Permissions for a particular token .
+      description: |
+        This API is responsible to get the  Authorization for a particular Token.
+        This API trys to answer the question What Do i have access to?
+        First it will validate it is a valid Authenticated Token and
+        then will get from the repository what are the available actions for the
+        user and on which resources , this authenticate  {subject, resource,
+        action}
+      operationId: getUserPermission
+      consumes:
+          - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+      security:
+        - bearer: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Permission"
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - token
+      summary: Get all Permissions for a particular token .
+      description: Update a permission.
+      operationId: updateUserPermission
+      consumes:
+          - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Permission
+          required: true
+          schema:
+            $ref: "#/definitions/Permission"
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+      security:
+        - bearer: []
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags:
+        - token
+      summary: Get all Permissions for a particular token .
+      description: Add a permission.
+      operationId: addUserPermission
+      consumes:
+          - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Permission
+          required: true
+          schema:
+            $ref: "#/definitions/Permission"
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+      security:
+        - bearer: []
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - token
+      summary: Get all Permissions for a particular token .
+      description: Delete a permission.
+      operationId: deleteUserPermission
+      consumes:
+          - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Permission
+          required: true
+          schema:
+            $ref: "#/definitions/Permission"
+        - in: header
+          name: Authorization
+          required: true
+          type: string
+      security:
+        - bearer: []
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+responses:
+  UnauthorizedError:
+    description: Authentication information is missing or invalid
+    headers:
+      WWW_Authenticate:
+        type: string
+securityDefinitions:
+  bearer:
+     type: apiKey
+     in: header
+     name: Authorization
+definitions:
+  Configuration:
+    type: object
+    properties:
+      id:
+        type: string
+      value:
+        type: string
+      enabled:
+        type: boolean
+    required:
+      - id
+  Login:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      type:
+        type: string
+      isDefault:
+        type: boolean
+      enabled:
+        type: boolean
+      canonicalUrl:
+        type: string
+    required:
+      - title
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+    required:
+      - message
+  Resource:
+    type: object
+    properties:
+      id:
+        type: string
+      description:
+        type: string
+    required:
+      - id
+  Permission:
+    type: object
+    properties:
+      email:
+        type: string
+      resource:
+        $ref: '#/definitions/Resource'
+      operation:
+        type: string
+      enabled:
+        type: boolean
+    required:
+      - email
+      - resource
+      - operation
