@@ -30,6 +30,7 @@ func configureAPI(api *operations.CidmAPI) http.Handler {
 	api.JSONProducer = runtime.JSONProducer()
 
 	// Header authorization Applies when the Authorization header is set with the Basic scheme
+	//TODO Implement authorizer
 	api.APIAuthorizer = &services.CAuthorizer{}
 	api.BearerAuth = services.HandleBearerAuth
 
@@ -65,6 +66,7 @@ func configureAPI(api *operations.CidmAPI) http.Handler {
 
 	return setupGlobalMiddleware(api.Serve(setupMiddleware))
 }
+
 func customShutdown() {
 	//Custom shutdown
 }
@@ -115,6 +117,7 @@ func setupMiddleware(handler http.Handler) http.Handler {
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
 	return handler
 }
+
 func configureFlags(api *operations.CidmAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
 }

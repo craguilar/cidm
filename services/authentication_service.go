@@ -133,6 +133,10 @@ func SplitBearerAuth(token string) (string, error) {
 	return "", ErrorSplitToken
 }
 
+func MultiFactor() {
+
+}
+
 func getSecret() []byte {
 	key, _ := GetSecret(jwtConst)
 	return []byte(key)
