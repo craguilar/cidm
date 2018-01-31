@@ -30,8 +30,8 @@ func configureAPI(api *operations.CidmAPI) http.Handler {
 	api.JSONProducer = runtime.JSONProducer()
 
 	// Header authorization Applies when the Authorization header is set with the Basic scheme
-	//TODO Implement authorizer
-	api.APIAuthorizer = &services.CAuthorizer{}
+	// Set your custom authorizer if needed. Default one is security.Authorized()
+	// Expected interface runtime.Authorizer
 	api.BearerAuth = services.HandleBearerAuth
 
 	// Get Login handler
@@ -81,13 +81,13 @@ func configureTLS(tlsConfig *tls.Config) {
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *graceful.Server, scheme, addr string) {
-
+	utils.Logger().Info("Server is initialized but not run yet... " + s.Addr)
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.
 // The middleware executes after routing but before authentication, binding and validation
 func setupMiddleware(handler http.Handler) http.Handler {
-
+	utils.Logger().Info("Setting up middleware ... ")
 	cors := handlers.AllowedOrigins([]string{"*"})
 	//TODO Implement micro cache for efficient return of web service rest API -
 	/*
@@ -109,7 +109,7 @@ func setupMiddleware(handler http.Handler) http.Handler {
 	   })
 	*/
 	//return cache.Middleware(handlers.CORS(cors)(handler))
-	return handlers.CORS(cors)(handler)
+	return services.Authorization(handlers.CORS(cors)(handler))
 }
 
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.

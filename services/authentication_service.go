@@ -26,6 +26,7 @@ var (
 )
 
 func HandleBearerAuth(token string) (interface{}, error) {
+	utils.Logger().Info("Authentication Handler")
 	jwtToken, err := SplitBearerAuth(token)
 	if err != nil {
 		return false, err

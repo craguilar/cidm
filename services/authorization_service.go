@@ -9,12 +9,12 @@ import (
 	"net/http"
 )
 
-type CAuthorizer struct {
-}
+func Authorization(a http.Handler) http.Handler {
 
-func (m *CAuthorizer) Authorize(request *http.Request, principal interface{}) error {
-	utils.Logger().Info("Authorizer")
-	return utils.ErrorNoDB
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		utils.Logger().Info("Authorization handler")
+		a.ServeHTTP(w, r)
+	})
 }
 
 //GetUserPermission
