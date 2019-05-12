@@ -2,6 +2,8 @@
 
 Cloud Identity Manager  (cidm) will take care of Authentication and Authorization mechanism as a service for a suite of services.
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/craguilar/cidm)](https://goreportcard.com/report/github.com/craguilar/cidm)
+
 ## Overview 
 Actors
 
